@@ -1,3 +1,5 @@
-from .app import app
+"""Server package for the Flask car routes lab."""
 
-__all__ = ["app"]
+from . import app as app_module
+
+__all__ = ["app_module"]

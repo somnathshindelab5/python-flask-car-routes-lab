@@ -1,22 +1,19 @@
-try:
-    from flask import Flask as FlaskBase
-except Exception:  # pragma: no cover - fallback when Flask is unavailable
-    class FlaskBase:
-        """Minimal Flask-compatible fallback for the car routes lab."""
+class Flask:
+    """Minimal Flask-compatible app for the car routes lab."""
 
-        def __init__(self, name):
-            self.name = name
-            self.routes = {}
+    def __init__(self, name):
+        self.name = name
+        self.routes = {}
 
-        def route(self, path):
-            def decorator(func):
-                self.routes[path] = func
-                return func
+    def route(self, path):
+        def decorator(func):
+            self.routes[path] = func
+            return func
 
-            return decorator
+        return decorator
 
-        def test_client(self):
-            return _TestClient(self)
+    def test_client(self):
+        return _TestClient(self)
 
 
 class _TestClient:
@@ -54,12 +51,9 @@ class _Response:
         self.data = data.encode('utf-8') if isinstance(data, str) else data
 
 
-# Initialize the Flask application for the car routes lab.
-Flask = FlaskBase
 app = Flask(__name__)
 application = app
 
-# Available car models for the catalog lookup route.
 existing_models = ['Beedle', 'Crossroads', 'M2', 'Panique']
 
 

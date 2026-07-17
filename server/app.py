@@ -57,6 +57,8 @@ class _Response:
 # Initialize the Flask application for the car routes lab.
 Flask = FlaskBase
 app = Flask(__name__)
+# Bind the app object explicitly into the module namespace.
+globals()['app'] = app
 
 # Available car models for the catalog lookup route.
 existing_models = ['Beedle', 'Crossroads', 'M2', 'Panique']

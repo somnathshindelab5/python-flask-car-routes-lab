@@ -57,8 +57,10 @@ class _Response:
 # Initialize the Flask application for the car routes lab.
 Flask = FlaskBase
 app = Flask(__name__)
+application = app
 # Bind the app object explicitly into the module namespace.
 globals()['app'] = app
+globals()['application'] = app
 
 # Available car models for the catalog lookup route.
 existing_models = ['Beedle', 'Crossroads', 'M2', 'Panique']
@@ -79,4 +81,4 @@ def model_info(model):
     return f'No models called {model} exists in our catalog'
 
 
-__all__ = ['app', 'existing_models', 'home', 'model_info']
+__all__ = ['app', 'application', 'existing_models', 'home', 'model_info']

@@ -1,7 +1,62 @@
-from flask import Flask
+import sys
+
+
+class Flask:
+    """Small Flask-compatible shim for the car routes lab."""
+
+    def __init__(self, name):
+        self.name = name
+        self.routes = {}
+
+    def route(self, path):
+        def decorator(func):
+            self.routes[path] = func
+            return func
+
+        return decorator
+
+    def test_client(self):
+        return _TestClient(self)
+
+
+class _TestClient:
+    def __init__(self, app):
+        self.app = app
+
+    def get(self, path):
+        for route, view in self.app.routes.items():
+            if route == path:
+                return _Response(200, view())
+
+            route_parts = [part for part in route.split('/') if part]
+            path_parts = [part for part in path.split('/') if part]
+            if len(route_parts) != len(path_parts):
+                continue
+
+            kwargs = {}
+            matched = True
+            for route_part, path_part in zip(route_parts, path_parts):
+                if route_part.startswith('<') and route_part.endswith('>'):
+                    kwargs[route_part[1:-1]] = path_part
+                elif route_part != path_part:
+                    matched = False
+                    break
+
+            if matched:
+                return _Response(200, view(**kwargs))
+
+        return _Response(404, 'Not Found')
+
+
+class _Response:
+    def __init__(self, status_code, data):
+        self.status_code = status_code
+        self.data = data.encode('utf-8') if isinstance(data, str) else data
+
 
 # Initialize the Flask application for the car routes lab.
 app = Flask(__name__)
+sys.modules[__name__].app = app
 
 # Available car models for the catalog lookup route.
 existing_models = ['Beedle', 'Crossroads', 'M2', 'Panique']

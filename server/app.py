@@ -58,9 +58,6 @@ class _Response:
 Flask = FlaskBase
 app = Flask(__name__)
 application = app
-# Bind the app object explicitly into the module namespace.
-globals()['app'] = app
-globals()['application'] = app
 
 # Available car models for the catalog lookup route.
 existing_models = ['Beedle', 'Crossroads', 'M2', 'Panique']
